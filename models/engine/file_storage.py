@@ -1,4 +1,6 @@
+#!/usr/bin/python3
 import json
+
 """storage file for all instances"""
 
 class FileStorage:
