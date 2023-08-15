@@ -30,9 +30,7 @@ class HBNBCommand(cmd.Cmd):
         """Call the original precmd method to maintain its behavior"""
         line = super().precmd(line)
 
-        
         print()
-
         return line
 
     def do_create(self, args):
@@ -87,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
                 print('** no instance found **')
 
     def do_all(self, args):
-        """Display a string representation of all instances   
+        """Display a string representation of all instances
         """
         args = args.split()
         objects = models.storage.all()
@@ -173,6 +171,7 @@ class HBNBCommand(cmd.Cmd):
            press enter an empty line
         """
         pass
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

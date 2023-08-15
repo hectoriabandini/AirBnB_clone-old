@@ -1,14 +1,14 @@
 #!/usr/bin/python3
-"""Module for doc test classes"""
+""""""Module for testing documentation and code style""" """
 import inspect
 import pep8
 
 
 class TestClassDocumentation():
-    """tests multiples classes"""
+    """Test cases for checking documentation and code style"""
 
     def __init__(self, tests, _class):
-        """Constructor"""
+        """initializer"""
         self.tests = tests
         self.name = _class
 
@@ -16,7 +16,7 @@ class TestClassDocumentation():
         self.functions = inspect.getmembers(self.name, inspect.isfunction)
 
     def documentation(self):
-        """Test documentation of class and methods"""
+        """check for documentation"""
         with self.tests.subTest(msg='Testing methods'):
             for f in self.functions:
                 with self.tests.subTest(msg='Documentation method {}'
@@ -30,7 +30,7 @@ class TestClassDocumentation():
             self.tests.assertGreaterEqual(len(doc), 1)
 
     def pep8(self, files):
-        """Test linter pep8 of files"""
+        """test code style using pep8 for the given files"""
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(files)
         self.tests.assertEqual(result.total_errors, 0,
