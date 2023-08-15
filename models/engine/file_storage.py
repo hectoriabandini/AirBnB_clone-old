@@ -17,11 +17,16 @@ class FileStorage():
     __file_path = "file.json"
     __objects = {}
 
-    def all(self):
-        """
-        returns the dictionary __objects
-        """
-        return FileStorage.__objects
+    def all(self, cls=None):
+        """Return a dictionary of all objects.If a class name is provided."""
+        if cls:
+            objects_of_class = {}
+            for key, value in self.__objects.items():
+                if value.__class__.__name__ == cls:
+                    objects_of_class[key] = value
+                    return objects_of_class
+                else:
+                    return self.__objects
 
     def new(self, obj):
         """

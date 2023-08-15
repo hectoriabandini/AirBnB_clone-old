@@ -64,44 +64,39 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-    def do_destroy(self, args):
-        """Delete an instance
-        """
+    def do_all(self, args):
+        """Display a string representation of all instances of a class."""
         args = args.split()
-        objects = models.storage.all()
 
         if len(args) == 0:
-            print('** class name missing **')
+            print("** class name missing **")
         elif args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
-        elif len(args) == 1:
-            print('** instance id missing **')
         else:
-            key = args[0] + '.' + args[1]
-            if key in objects.keys():
-                objects.pop(key, None)
-                models.storage.save()
+            class_name = args[0]
+            instances = models.storage.all(class_name)
+            if instances is not None:
+                new_string = [obj.__str__() for obj in instances.values()]
+                print(new_string)
             else:
-                print('** no instance found **')
+                print("** no instance found **")
 
     def do_all(self, args):
-        """Display a string representation of all instances
-        """
+        """Display a string representation of all instances of a class."""
         args = args.split()
         objects = models.storage.all()
         new_string = []
 
         if len(args) == 0:
-            for obj in objects.values():
-                new_string.append(obj.__str__())
-            print(new_string)
+            print("** class name missing **")
         elif args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
         else:
-            for obj in objects.values():
-                if obj.__class__.__name__ == args[0]:
-                    new_string.append(obj.__str__())
-            print(new_string)
+            class_name = args[0]
+            instances = models.storage.all(class_name)
+            for obj in instances.values():
+                new_string.append(obj.__str__())
+                print(new_string)
 
     def do_update(self, args):
         """update an instance
@@ -186,13 +181,46 @@ class HBNBCommand(cmd.Cmd):
             print(instances_count)
 
     def default(self, line):
-        """Handle the <class name>.count() syntax."""
-        class_name, _, method = line.partition('.')
-        if class_name in HBNBCommand.__classes and method == 'count()':
-            args = class_name
-            self.do_count(args)
+        """Handle various syntaxes."""
+        parts = shlex.split(line)
+        if len(parts) >= 2 and parts[1].startswith('show('):
+            class_name = parts[0]
+            id_string = parts[1][5:-1]
+            if id_string.strip():
+                self.do_show(f"{class_name} {id_string.strip()}")
+            else:
+                print("*** Unknown syntax:", line)
+        elif parts[0] in HBNBCommand.__classes:
+            if len(parts) == 2:
+                class_name = parts[0]
+                method = parts[1]
+                if method == 'count()':
+                    self.do_count(class_name)
+                elif method == 'all()':
+                    self.do_all(class_name)
+                else:
+                    print("*** Unknown syntax:", line)
+            else:
+                print("*** Unknown syntax:", line)
         else:
             print("*** Unknown syntax:", line)
+
+            """
+    def default(self, line):
+        Handle the <class name>.count() or <class name>.all() syntax.
+        class_name, _, method = line.partition('.')
+        if class_name in HBNBCommand.__classes:
+            if method == 'count()':
+                args = class_name
+                self.do_count(args)
+            elif method == 'all()':
+                args = class_name
+                self.do_all(args)
+            else:
+                print("*** Unknown syntax:", line)
+        else:
+            print("*** Unknown syntax:", line)
+            """
 
 
 if __name__ == '__main__':
