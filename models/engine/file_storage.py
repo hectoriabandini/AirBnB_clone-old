@@ -57,3 +57,16 @@ class FileStorage():
 
         except FileNotFoundError:
             pass
+
+    def count(self, cls=None):
+        """Count the number of instances of a class if cls is specified,
+        otherwise count the total number of instances.
+        """
+        if cls is None:
+            return len(self.__objects)
+        else:
+            count = 0
+            for obj_id, obj in self.__objects.items():
+                if obj.__class__.__name__ == cls:
+                    count += 1
+            return count
