@@ -3,6 +3,7 @@ import unittest
 from models.base_model import BaseModel
 from datetime import datetime
 
+
 class TestBaseModel(unittest.TestCase):
     def setUp(self):
         self.my_model = BaseModel()
@@ -17,7 +18,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue(hasattr(self.my_model, "my_number"))
 
     def test_str_method(self):
-        expected = "[BaseModel] ({}) {}".format(self.my_model.id, self.my_model.__dict__)
+        expected = "[BaseModel] ({}) {}".format
+        (self.my_model.id, self.my_model.__dict__)
         self.assertEqual(str(self.my_model), expected)
 
     def test_save_method(self):
@@ -38,10 +40,13 @@ class TestBaseModel(unittest.TestCase):
 
     def test_to_dict_datetime_format(self):
         my_model_dict = self.my_model.to_dict()
-        created_at = datetime.strptime(my_model_dict['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
-        updated_at = datetime.strptime(my_model_dict['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
+        created_at = datetime.strptime
+        (my_model_dict['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+        updated_at = datetime.strptime
+        (my_model_dict['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
         self.assertEqual(created_at, self.my_model.created_at)
         self.assertEqual(updated_at, self.my_model.updated_at)
+
 
 if __name__ == '__main__':
     unittest.main()
